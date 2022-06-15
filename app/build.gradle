@@ -6,14 +6,14 @@ plugins {
 }
 
 android {
-    compileSdk versions.compileSdk
+    compileSdk Android.compileSdk
 
     defaultConfig {
-        applicationId "com.airlinesdemoapp"
-        minSdk versions.minSdk
-        targetSdk versions.targetSdk
-        versionCode versions.versionCode
-        versionName versions.versionName
+        applicationId Android.applicationId
+        minSdk Android.minSdk
+        targetSdk Android.targetSdk
+        versionCode Android.versionCode
+        versionName Android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,15 +34,23 @@ android {
 }
 
 dependencies {
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
-    implementation "androidx.core:core-ktx:$versions.kotlin"
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "com.google.android.material:material:$versions.material"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-    implementation "com.jakewharton.timber:timber:$versions.TIMBER"
+    implementation "com.google.dagger:dagger:$Versions.DAGGER"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    kapt "com.google.dagger:dagger-compiler:$Versions.DAGGER"
+    implementation "androidx.core:core-ktx:$Versions.CORE_KTX"
+    implementation "androidx.appcompat:appcompat:$Versions.APP_COMPAT_VERSION"
+    implementation "com.google.android.material:material:$Versions.MATERIAL_VERSION"
+    implementation "androidx.constraintlayout:constraintlayout:$Versions.CONSTRAINT_LAYOUT"
+    implementation "com.jakewharton.timber:timber:$Versions.TIMBER"
+    implementation "io.reactivex.rxjava2:rxjava:$Versions.RXJAVA_VERSION"
+    implementation "io.reactivex.rxjava2:rxandroid:$Versions.RX_ANDROID"
+    implementation "com.google.code.gson:gson:$Versions.GSON_VERSION"
+    implementation"com.squareup.retrofit2:converter-gson:$Versions.GSON_CONVERTER"
+    "com.squareup.okhttp3:logging-interceptor:$Versions.OKHTTP_LOGGING_INTERCEPTOR_VERSION"
 
-    testImplementation "junit:junit:$versions.junit"
-    androidTestImplementation "androidx.test.ext:junit:$versions.androidx_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx_espresso_core"
+    testImplementation "junit:junit:$Versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$Versions.JUNIT_EXT_VER"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$Versions.ESPRESSO"
 }
