@@ -40,7 +40,35 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         vGetAirLines()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
         observerAirlines()
+        observerDelete()
+    }
+
+    private fun observerDelete() {
+        viewModel.deleteState.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Success -> {
+                    handleLoading(false)
+                    displayMessage(it.data)
+                    vGetAirLines()
+                }
+                is DataState.Error -> {
+                    handleLoading(false)
+                    val string: String = if (it.error is Failure.NetworkConnectionError)
+                        getString(R.string.network_connection)
+                    else
+                        getString(R.string.unknown_error)
+                    displayMessage(string)
+                }
+                is DataState.loading -> {
+                    handleLoading(true)
+                }
+            }
+        }
     }
 
     private fun observerAirlines() {
@@ -56,7 +84,7 @@ class HomeFragment : Fragment() {
                         getString(R.string.network_connection)
                     else
                         getString(R.string.unknown_error)
-                    displayError(string)
+                    displayMessage(string)
                 }
                 is DataState.loading -> {
                     handleLoading(true)
@@ -77,7 +105,7 @@ class HomeFragment : Fragment() {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun displayError(msg: String) {
+    private fun displayMessage(msg: String) {
         msg.let {
             Snackbar.make(mainView, msg, Toast.LENGTH_SHORT).show()
         }
@@ -99,6 +127,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onDeleteItem(current: UserInfo) {
+                    viewModel.resetDeleteState()
                     viewModel.deleteAirLine(current)
                 }
 

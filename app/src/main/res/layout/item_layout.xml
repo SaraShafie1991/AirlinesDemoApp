@@ -5,11 +5,11 @@
     android:padding="@dimen/big_padding"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageViewAvatar"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="@dimen/big_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -19,21 +19,22 @@
         style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginStart="@dimen/one_and_half_grid_unit"
+        android:layout_marginEnd="@dimen/one_grid_unit"
         android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="@+id/imageViewAvatar"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewAvatar"
         app:layout_constraintEnd_toStartOf="@+id/imageViewInfolayout"
         app:layout_constraintStart_toEndOf="@+id/imageViewAvatar"
         tools:text="London"
-        android:textSize="21sp"
-        android:letterSpacing=".15"
+        android:textSize="18sp"
         android:lineSpacingExtra="36sp"/>
 
     <RelativeLayout
         android:id="@+id/imageViewInfolayout"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="@dimen/big_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">

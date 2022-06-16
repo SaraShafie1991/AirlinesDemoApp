@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Sara_MCS/AirlinesDemoApp/app/src/main/res/drawable/ic_delete.xml" value="0.1725" />
+        <entry key="..\:/Sara_MCS/AirlinesDemoApp/app/src/main/res/drawable/ic_edit.xml" value="0.1725" />
+        <entry key="..\:/Sara_MCS/AirlinesDemoApp/app/src/main/res/layout/fragment_details.xml" value="0.20416666666666666" />
+        <entry key="..\:/Sara_MCS/AirlinesDemoApp/app/src/main/res/layout/fragment_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Sara_MCS/AirlinesDemoApp/app/src/main/res/layout/item_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/Sara_MCS/AirlinesDemoApp_old/app/src/main/res/layout/fragment_details.xml" value="0.16018518518518518" />
         <entry key="..\:/Sara_MCS/AirlinesDemoApp_old/app/src/main/res/layout/fragment_home.xml" value="0.16018518518518518" />
         <entry key="..\:/Sara_MCS/AirlinesDemoApp_old/app/src/main/res/layout/item_layout.xml" value="0.16018518518518518" />

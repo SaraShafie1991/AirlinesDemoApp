@@ -1,8 +1,8 @@
 package com.airlinesdemoapp.core.di
 
 import com.airlinesdemoapp.data.api.RestAPI
-import com.airlinesdemoapp.data.repository.AirlinesRepositoryImpl
-import com.airlinesdemoapp.domain.repository.AirlinesRepository
+import com.airlinesdemoapp.data.repository.RepositoryImpl
+import com.airlinesdemoapp.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun providesRestaurantsRepository(api: RestAPI): AirlinesRepository {
-        return AirlinesRepositoryImpl(api)
+    fun providesRestaurantsRepository(api: RestAPI): Repository {
+        return RepositoryImpl(api)
     }
 }

@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airlinesdemoapp.R
 import com.airlinesdemoapp.domain.entity.UserInfo
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_layout.view.*
 
-class HomeAdapter(mainActivity: AppCompatActivity, val onClickInterface: OnClickInterface) :
+class HomeAdapter(val _activity: AppCompatActivity, val onClickInterface: OnClickInterface) :
     ListAdapter<UserInfo, HomeAdapter.HomeViewHolder>(AirLinesComparator()) {
 
-    val activity: AppCompatActivity = mainActivity
+    val activity: AppCompatActivity = _activity
 
     interface OnClickInterface {
         fun onClickRow(current: UserInfo)
@@ -29,6 +30,9 @@ class HomeAdapter(mainActivity: AppCompatActivity, val onClickInterface: OnClick
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current)
+        Glide.with(activity)
+            .load(current?.avatar)
+            .into(holder.itemView.imageViewAvatar)
         holder.itemView.setOnClickListener {
             onClickInterface.onClickRow(current)
         }
@@ -44,7 +48,6 @@ class HomeAdapter(mainActivity: AppCompatActivity, val onClickInterface: OnClick
                 append(" ")
                 append(user?.last_name)
             }
-
         }
 
         companion object {

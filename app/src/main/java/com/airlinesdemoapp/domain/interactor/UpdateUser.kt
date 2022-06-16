@@ -1,7 +1,6 @@
 package com.airlinesdemoapp.domain.interactor
 
 import com.airlinesdemoapp.core.common.DataState
-import com.airlinesdemoapp.domain.entity.UserInfo
 import com.airlinesdemoapp.domain.error.ErrorHandler
 import com.airlinesdemoapp.domain.error.Failure
 import com.airlinesdemoapp.domain.repository.Repository
@@ -11,10 +10,10 @@ import java.net.HttpURLConnection
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class GetAirlines @Inject constructor(private val repository: Repository)
-    : Usecase<Int, Single<DataState<List<UserInfo>>>>, ErrorHandler {
-    override fun execute(pageNo: Int): Single<DataState<List<UserInfo>>> {
-        return repository.getAirlines(pageNo).onErrorReturn {
+class UpdateUser @Inject constructor(private val repository: Repository)
+    : Usecase<UpdateData, Single<DataState<String>>>, ErrorHandler {
+    override fun execute(para: UpdateData): Single<DataState<String>> {
+        return repository.updateUser(para).onErrorReturn {
             DataState.Error(getError(it))
         }
     }
@@ -40,3 +39,6 @@ class GetAirlines @Inject constructor(private val repository: Repository)
         }
     }
 }
+
+
+class UpdateData(val id:Int, val text:String)
