@@ -1,13 +1,13 @@
 package com.airlinesdemoapp.data.cache
 
-import com.airlinesdemoapp.data.api_response.AirLine
+import com.airlinesdemoapp.domain.entity.UserInfo
 
 object InMemoryCache {
-    private val cache = ArrayList<AirLine>()
+    private val cache = ArrayList<UserInfo>()
 
     fun get() = cache
 
-    fun add(restaurants: List<AirLine>) {
-        cache.addAll(restaurants)
+    fun add(airlines: List<UserInfo>) {
+        cache.addAll(airlines)
     }
 }

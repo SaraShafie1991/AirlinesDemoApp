@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AirlinesDemoApp</string>
+    <string name="network_connection">Connection error</string>
+    <string name="unknown_error">Something went wrong</string>
 </resources>

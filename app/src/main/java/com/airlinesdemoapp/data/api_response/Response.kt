@@ -1,3 +1,8 @@
 package com.airlinesdemoapp.data.api_response
 
-data class Response(val airLines: List<AirLine>)
+data class Response(
+    val page:Int,
+    val per_page:Int,
+    val total:Int,
+    val total_pages:Int,
+    val data: List<ApiResponse>)
