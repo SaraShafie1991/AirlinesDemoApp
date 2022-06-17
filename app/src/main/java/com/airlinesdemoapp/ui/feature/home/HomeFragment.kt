@@ -44,7 +44,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        vGetAirLines(pageNo)
         setupObservers()
     }
 
@@ -138,7 +137,8 @@ class HomeFragment : Fragment() {
                     viewModel.deleteAirLine(current)
                 }
 
-            },ArrayList())
+            }, ArrayList()
+        )
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
@@ -173,4 +173,15 @@ class HomeFragment : Fragment() {
         vGetAirLines(pageNo)
     }
 
+    override fun onResume() {
+        super.onResume()
+        resetFlags()
+    }
+
+    private fun resetFlags() {
+        isLoading = false
+        isLastPage = false
+        pageNo = 1
+        vGetAirLines(pageNo)
+    }
 }
