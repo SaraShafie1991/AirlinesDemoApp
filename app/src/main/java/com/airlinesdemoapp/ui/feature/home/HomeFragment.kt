@@ -194,6 +194,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun resetFlags() {
+        viewModel.resetDeleteState()
         isLoading = false
         isLastPage = false
         pageNo = 1
