@@ -16,6 +16,7 @@ import com.airlinesdemoapp.core.navigation.AppNavigator
 import com.airlinesdemoapp.core.navigation.Screen
 import com.airlinesdemoapp.domain.entity.UserInfo
 import com.airlinesdemoapp.domain.error.Failure
+import com.airlinesdemoapp.utils.PaginationScrollListener
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -24,10 +25,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+    private var pageNo: Int = 1
+
     @Inject
     lateinit var appNavigator: AppNavigator
-    private val viewModel:HomeViewModel  by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var adapter: HomeAdapter
+    var isLastPage: Boolean = false
+    var isLoading: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +44,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        vGetAirLines()
+        vGetAirLines(pageNo)
         setupObservers()
     }
 
@@ -54,7 +59,7 @@ class HomeFragment : Fragment() {
                 is DataState.Success -> {
                     handleLoading(false)
                     displayMessage(it.data)
-                    vGetAirLines()
+                    vGetAirLines(pageNo)
                 }
                 is DataState.Error -> {
                     handleLoading(false)
@@ -76,7 +81,13 @@ class HomeFragment : Fragment() {
             when (it) {
                 is DataState.Success -> {
                     handleLoading(false)
-                    addToListView(it.data)
+                    adapter.addData(it.data.list)
+                    isLoading = pageNo < it.data.total
+                    isLastPage = pageNo > it.data.total
+                    if(isLoading){
+                        pageNo++
+                        getMoreItems()
+                    }
                 }
                 is DataState.Error -> {
                     handleLoading(false)
@@ -93,13 +104,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun addToListView(data: List<UserInfo>) {
-        val newLines = viewModel.getNewAirLines(data)
-        newLines.forEach { line ->
-            viewModel.airlines[line.id] = line
-        }
-        adapter.submitList(newLines)
-    }
 
     private fun handleLoading(isLoading: Boolean) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -111,18 +115,21 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun vGetAirLines() {
+    private fun vGetAirLines(_pageNo: Int) {
         viewModel.resetAirlineState()
-        viewModel.getAirlines(1)
+        viewModel.getAirlines(_pageNo)
     }
 
     private fun setupUI() {
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        val layout = LinearLayoutManager(requireActivity())
+        recyclerView.layoutManager = layout
         adapter = HomeAdapter(requireActivity() as AppCompatActivity,
             object : HomeAdapter.OnClickInterface {
                 override fun onClickRow(current: UserInfo) {
-                    val airline = UserInfo(current.id, current.email, current.first_name,
-                        current.last_name, current.avatar)
+                    val airline = UserInfo(
+                        current.id, current.email, current.first_name,
+                        current.last_name, current.avatar
+                    )
                     appNavigator.navigateTo(Screen.DETAILS, airline)
                 }
 
@@ -131,7 +138,7 @@ class HomeFragment : Fragment() {
                     viewModel.deleteAirLine(current)
                 }
 
-            })
+            },ArrayList())
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
@@ -139,6 +146,31 @@ class HomeFragment : Fragment() {
             )
         )
         recyclerView.adapter = adapter
+
+        recyclerView?.addOnScrollListener(object : PaginationScrollListener(layout) {
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+            override fun loadMoreItems() {
+                isLoading = true
+                pageNo++
+                //you have to call loadmore items to get more data
+                getMoreItems()
+            }
+        })
+    }
+
+    fun getMoreItems() {
+        //after fetching your data assuming you have fetched list in your
+        // recyclerview adapter assuming your recyclerview adapter is
+        //rvAdapter
+        isLoading = false
+        vGetAirLines(pageNo)
     }
 
 }

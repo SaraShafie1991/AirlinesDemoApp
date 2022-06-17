@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.airlinesdemoapp.core.common.BaseViewModel
 import com.airlinesdemoapp.core.common.DataState
 import com.airlinesdemoapp.data.api_response.ApiResponse
+import com.airlinesdemoapp.data.repository.ReturnedData
 import com.airlinesdemoapp.domain.entity.UserInfo
 import com.airlinesdemoapp.domain.interactor.DeleteUser
 import com.airlinesdemoapp.domain.interactor.GetAirlines
@@ -18,9 +19,9 @@ class HomeViewModel @Inject constructor(private val getAirlines: GetAirlines,
                                         private val deleteUser: DeleteUser)
     : BaseViewModel() {
 
-    private val _airlinesState = MutableLiveData<DataState<List<UserInfo>>>()
+    private val _airlinesState = MutableLiveData<DataState<ReturnedData>>()
 
-    val airlinesState: LiveData<DataState<List<UserInfo>>>
+    val airlinesState: LiveData<DataState<ReturnedData>>
         get() = _airlinesState
 
     private val _deleteState = MutableLiveData<DataState<String>>()
@@ -62,18 +63,5 @@ class HomeViewModel @Inject constructor(private val getAirlines: GetAirlines,
 
     fun resetAirlineState() {
         _airlinesState.value = null
-    }
-    fun getNewAirLines(list: List<UserInfo>):ArrayList<UserInfo>{
-        val airlinesToBeDisplayed = ArrayList<UserInfo>()
-        val mainList = airlines.values
-        if(mainList.isNotEmpty()) {
-            list.forEach {
-                if (mainList.contains(it))
-                    airlinesToBeDisplayed.add(it)
-            }
-        }else{
-            airlinesToBeDisplayed.addAll(list)
-        }
-        return  airlinesToBeDisplayed
     }
 }

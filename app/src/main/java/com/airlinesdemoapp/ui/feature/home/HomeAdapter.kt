@@ -13,8 +13,10 @@ import com.airlinesdemoapp.domain.entity.UserInfo
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_layout.view.*
 
-class HomeAdapter(val _activity: AppCompatActivity, val onClickInterface: OnClickInterface) :
-    ListAdapter<UserInfo, HomeAdapter.HomeViewHolder>(AirLinesComparator()) {
+class HomeAdapter(
+    _activity: AppCompatActivity, val onClickInterface: OnClickInterface,
+    var list: ArrayList<UserInfo>) :
+    RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     val activity: AppCompatActivity = _activity
 
@@ -28,7 +30,7 @@ class HomeAdapter(val _activity: AppCompatActivity, val onClickInterface: OnClic
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        val current = getItem(position)
+        val current = list.get(position)
         holder.bind(current)
         Glide.with(activity)
             .load(current?.avatar)
@@ -59,14 +61,13 @@ class HomeAdapter(val _activity: AppCompatActivity, val onClickInterface: OnClic
         }
     }
 
-    class AirLinesComparator : DiffUtil.ItemCallback<UserInfo>() {
-        override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
-            return oldItem == newItem
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
-            return oldItem == newItem
-        }
+    override fun getItemCount(): Int {
+        return list.size
+    }
+    fun addData(listItems: ArrayList<UserInfo>) {
+        val size = this.list.size
+        this.list.addAll(listItems)
+        val sizeNew = this.list.size
+        notifyItemRangeChanged(size, sizeNew)
     }
 }

@@ -2,8 +2,6 @@ package com.airlinesdemoapp.data.repository
 
 import com.airlinesdemoapp.core.common.DataState
 import com.airlinesdemoapp.data.api.RestAPI
-import com.airlinesdemoapp.data.api_response.ApiResponse
-import com.airlinesdemoapp.data.cache.InMemoryCache
 import com.airlinesdemoapp.domain.entity.UserInfo
 import com.airlinesdemoapp.domain.interactor.UpdateData
 import com.airlinesdemoapp.domain.repository.Repository
@@ -13,17 +11,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 class RepositoryImpl(private val api: RestAPI) : Repository {
-    override fun getAirlines(pageNo: Int): Single<DataState<List<UserInfo>>> {
-        val cache = InMemoryCache.get()
-        val filteredData = ArrayList<UserInfo>()
-
-        cache.forEach {
-            filteredData.add(it)
-        }
-
-        if (filteredData != null && filteredData.isNotEmpty()) {
-            return Single.just(DataState.Success(filteredData))
-        }
+    override fun getAirlines(pageNo: Int): Single<DataState<ReturnedData>> {
         return api.getAirLines(pageNo)
             .map {
                 val restList = ArrayList<UserInfo>()
@@ -37,8 +25,8 @@ class RepositoryImpl(private val api: RestAPI) : Repository {
                     )
                     restList.add(newRestaurant)
                 }
-                InMemoryCache.add(restList)
-                DataState.Success(restList)
+                var data = ReturnedData(it.total_pages, restList)
+                DataState.Success(data)
             }
     }
 
@@ -64,3 +52,5 @@ class RepositoryImpl(private val api: RestAPI) : Repository {
         }
     }
 }
+
+class ReturnedData (var total:Int, var list:ArrayList<UserInfo>)
