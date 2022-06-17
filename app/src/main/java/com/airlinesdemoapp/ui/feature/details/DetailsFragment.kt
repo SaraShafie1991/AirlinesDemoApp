@@ -58,10 +58,7 @@ class DetailsFragment : Fragment() {
                 is DataState.Success -> {
                     vChangeData()
                     handleLoading(false)
-                    if (it.data != null && it.data.isNotEmpty())
-                        displayMessage(it.data)
-                    else
-                        displayMessage("Name is updated successfully")
+                    displayMessage("Name changed to (${it.data}) successfully")
                 }
                 is DataState.Error -> {
                     handleLoading(false)
@@ -106,13 +103,13 @@ class DetailsFragment : Fragment() {
         input.setHint("Enter new name")
         input.inputType = InputType.TYPE_CLASS_TEXT
         val param = input.layoutParams as? ViewGroup.MarginLayoutParams
-        param?.setMargins(10,10,10,10)
-        if(param != null) {
+        param?.setMargins(10, 10, 10, 10)
+        if (param != null) {
             input.layoutParams = param
         }
         builder.setView(input)
         // Set up the buttons
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("Update") { dialog, which ->
             // Here you get get input text from the Edittext
             val m_Text = input.text.toString()
             if (airline != null && m_Text.isNotEmpty() && m_Text.isNotBlank()) {

@@ -44,7 +44,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        setupClickListener()
         setupObservers()
+    }
+
+    private fun setupClickListener() {
+        button.setOnClickListener {
+            vGetAirLines(pageNo)
+        }
     }
 
     private fun setupObservers() {
@@ -83,13 +90,14 @@ class HomeFragment : Fragment() {
                     adapter.addData(it.data.list)
                     isLoading = pageNo < it.data.total
                     isLastPage = pageNo > it.data.total
-                    if(isLoading){
+                    if (isLoading) {
                         pageNo++
                         getMoreItems()
                     }
                 }
                 is DataState.Error -> {
                     handleLoading(false)
+                    vHandleInternetConnection()
                     val string: String = if (it.error is Failure.NetworkConnectionError)
                         getString(R.string.network_connection)
                     else
@@ -103,9 +111,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun vHandleInternetConnection() {
+        internetconnection.visibility = if (adapter.list.size == 0) View.VISIBLE else View.GONE
+    }
+
 
     private fun handleLoading(isLoading: Boolean) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        recyclerView.visibility = if (adapter.list.size == 0) View.GONE else View.VISIBLE
+        internetconnection.visibility = View.GONE
     }
 
     private fun displayMessage(msg: String) {
@@ -122,7 +136,8 @@ class HomeFragment : Fragment() {
     private fun setupUI() {
         val layout = LinearLayoutManager(requireActivity())
         recyclerView.layoutManager = layout
-        adapter = HomeAdapter(requireActivity() as AppCompatActivity,
+        adapter = HomeAdapter(
+            requireActivity() as AppCompatActivity,
             object : HomeAdapter.OnClickInterface {
                 override fun onClickRow(current: UserInfo) {
                     val airline = UserInfo(
@@ -182,6 +197,7 @@ class HomeFragment : Fragment() {
         isLoading = false
         isLastPage = false
         pageNo = 1
+        adapter.list.clear()
         vGetAirLines(pageNo)
     }
 }
