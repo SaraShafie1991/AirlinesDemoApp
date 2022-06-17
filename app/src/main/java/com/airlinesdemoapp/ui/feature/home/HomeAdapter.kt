@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.item_layout.view.*
 
 class HomeAdapter(
     _activity: AppCompatActivity, val onClickInterface: OnClickInterface,
-    var list: ArrayList<UserInfo>) :
+    var list: List<UserInfo>
+) :
     RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     val activity: AppCompatActivity = _activity
@@ -33,7 +34,7 @@ class HomeAdapter(
         val current = list.get(position)
         holder.bind(current)
         Glide.with(activity)
-            .load(current?.avatar)
+            .load(current.avatar)
             .into(holder.itemView.imageViewAvatar)
         holder.itemView.setOnClickListener {
             onClickInterface.onClickRow(current)
@@ -42,6 +43,7 @@ class HomeAdapter(
             onClickInterface.onDeleteItem(current)
         }
     }
+
 
     class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(user: UserInfo?) {
@@ -61,13 +63,12 @@ class HomeAdapter(
         }
     }
 
+    fun addData(listItems: ArrayList<UserInfo>) {
+        this.list = listItems
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return list.size
-    }
-    fun addData(listItems: ArrayList<UserInfo>) {
-        val size = this.list.size
-        this.list.addAll(listItems)
-        val sizeNew = this.list.size
-        notifyItemRangeChanged(size, sizeNew)
     }
 }

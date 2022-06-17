@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: HomeAdapter
     var isLastPage: Boolean = false
     var isLoading: Boolean = false
+    var dataList = ArrayList<UserInfo>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,8 +87,9 @@ class HomeFragment : Fragment() {
         viewModel.airlinesState.observe(viewLifecycleOwner) {
             when (it) {
                 is DataState.Success -> {
+                    dataList.addAll(it.data.list)
+                    adapter.addData(dataList)
                     handleLoading(false)
-                    adapter.addData(it.data.list)
                     isLoading = pageNo < it.data.total
                     isLastPage = pageNo > it.data.total
                     if (isLoading) {
@@ -112,13 +114,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun vHandleInternetConnection() {
-        internetconnection.visibility = if (adapter.list.size == 0) View.VISIBLE else View.GONE
+        internetconnection.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
 
     private fun handleLoading(isLoading: Boolean) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        recyclerView.visibility = if (adapter.list.size == 0) View.GONE else View.VISIBLE
+        recyclerView.visibility = if (adapter.itemCount == 0) View.GONE else View.VISIBLE
         internetconnection.visibility = View.GONE
     }
 
@@ -136,24 +138,7 @@ class HomeFragment : Fragment() {
     private fun setupUI() {
         val layout = LinearLayoutManager(requireActivity())
         recyclerView.layoutManager = layout
-        adapter = HomeAdapter(
-            requireActivity() as AppCompatActivity,
-            object : HomeAdapter.OnClickInterface {
-                override fun onClickRow(current: UserInfo) {
-                    val airline = UserInfo(
-                        current.id, current.email, current.first_name,
-                        current.last_name, current.avatar
-                    )
-                    appNavigator.navigateTo(Screen.DETAILS, airline)
-                }
-
-                override fun onDeleteItem(current: UserInfo) {
-                    viewModel.resetDeleteState()
-                    viewModel.deleteAirLine(current)
-                }
-
-            }, ArrayList()
-        )
+        adapter = createHomeAdapter()
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
@@ -180,6 +165,27 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun createHomeAdapter(): HomeAdapter {
+        return HomeAdapter(
+            requireActivity() as AppCompatActivity,
+            object : HomeAdapter.OnClickInterface {
+                override fun onClickRow(current: UserInfo) {
+                    val airline = UserInfo(
+                        current.id, current.email, current.first_name,
+                        current.last_name, current.avatar
+                    )
+                    appNavigator.navigateTo(Screen.DETAILS, airline)
+                }
+
+                override fun onDeleteItem(current: UserInfo) {
+                    viewModel.resetDeleteState()
+                    viewModel.deleteAirLine(current)
+                }
+
+            }, ArrayList())
+
+    }
+
     fun getMoreItems() {
         //after fetching your data assuming you have fetched list in your
         // recyclerview adapter assuming your recyclerview adapter is
@@ -198,7 +204,7 @@ class HomeFragment : Fragment() {
         isLoading = false
         isLastPage = false
         pageNo = 1
-        adapter.list.clear()
+        dataList = ArrayList()
         vGetAirLines(pageNo)
     }
 }
