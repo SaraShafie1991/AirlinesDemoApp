@@ -12,7 +12,7 @@ import java.net.HttpURLConnection
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class GetAirlines @Inject constructor(private val repository: Repository)
+open class GetAirlines @Inject constructor(private val repository: Repository)
     : Usecase<Int, Single<DataState<ReturnedData>>>, ErrorHandler {
     override fun execute(para: Int): Single<DataState<ReturnedData>> {
         return repository.getAirlines(para).onErrorReturn {

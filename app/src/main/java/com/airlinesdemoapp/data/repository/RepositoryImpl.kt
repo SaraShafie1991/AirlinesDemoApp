@@ -32,7 +32,7 @@ class RepositoryImpl(private val api: RestAPI) : Repository {
 
     override fun deleteUser(id: Int): Single<DataState<String>> {
         return api.deleteUser(id).map {
-            DataState.Success(it.message)
+            DataState.Success(it.name)
         }
     }
 
@@ -48,7 +48,7 @@ class RepositoryImpl(private val api: RestAPI) : Repository {
         val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
 
         return api.updateUser(updateData.id, requestBody).map {
-            DataState.Success(it.message)
+            DataState.Success(it.name)
         }
     }
 }

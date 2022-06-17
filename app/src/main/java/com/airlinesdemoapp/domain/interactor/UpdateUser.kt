@@ -10,7 +10,7 @@ import java.net.HttpURLConnection
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class UpdateUser @Inject constructor(private val repository: Repository)
+open class UpdateUser @Inject constructor(private val repository: Repository)
     : Usecase<UpdateData, Single<DataState<String>>>, ErrorHandler {
     override fun execute(para: UpdateData): Single<DataState<String>> {
         return repository.updateUser(para).onErrorReturn {
@@ -41,4 +41,4 @@ class UpdateUser @Inject constructor(private val repository: Repository)
 }
 
 
-class UpdateData(val id:Int, val text:String)
+class UpdateData(val id:Int, val text:String?)

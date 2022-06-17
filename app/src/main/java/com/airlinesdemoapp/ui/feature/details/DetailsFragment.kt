@@ -117,6 +117,7 @@ class DetailsFragment : Fragment() {
             val m_Text = input.text.toString()
             if (airline != null && m_Text.isNotEmpty() && m_Text.isNotBlank()) {
                 updateData = UpdateData(airline!!.id, m_Text)
+                viewModel.resetUpdateState()
                 viewModel.updateUser(updateData)
             }
         }

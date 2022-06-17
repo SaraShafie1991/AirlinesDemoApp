@@ -6,5 +6,5 @@ data class Response(
     val total: Int,
     val total_pages: Int,
     val data: List<ApiResponse>,
-    val message: String
+    val name: String
 )

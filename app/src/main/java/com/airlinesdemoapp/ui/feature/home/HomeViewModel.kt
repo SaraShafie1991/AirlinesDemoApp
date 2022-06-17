@@ -15,9 +15,10 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val getAirlines: GetAirlines,
-                                        private val deleteUser: DeleteUser)
-    : BaseViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getAirlines: GetAirlines,
+    private val deleteUser: DeleteUser
+) : BaseViewModel() {
 
     private val _airlinesState = MutableLiveData<DataState<ReturnedData>>()
 
@@ -28,8 +29,6 @@ class HomeViewModel @Inject constructor(private val getAirlines: GetAirlines,
 
     val deleteState: LiveData<DataState<String>>
         get() = _deleteState
-
-    val airlines = HashMap<Int, UserInfo>()
 
     fun deleteAirLine(current: UserInfo) {
         if (_deleteState.value != null) return
@@ -44,10 +43,12 @@ class HomeViewModel @Inject constructor(private val getAirlines: GetAirlines,
                 compositeDisposable.add(it)
             }
     }
+
     fun resetDeleteState() {
         _deleteState.value = null
     }
-    fun getAirlines(pageNo:Int) {
+
+    fun getAirlines(pageNo: Int) {
         if (_airlinesState.value != null) return
         _airlinesState.value = DataState.loading
         getAirlines.execute(pageNo)

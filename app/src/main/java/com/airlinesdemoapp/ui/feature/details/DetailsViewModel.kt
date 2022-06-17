@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(private val updateUser: UpdateUser)
+open class DetailsViewModel @Inject constructor(private val updateUser: UpdateUser)
     : BaseViewModel() {
 
     private val _updateState = MutableLiveData<DataState<String>>()
@@ -20,9 +20,11 @@ class DetailsViewModel @Inject constructor(private val updateUser: UpdateUser)
     val updateState: LiveData<DataState<String>>
         get() = _updateState
 
+    var updateUserFromFragment: UpdateData = UpdateData(-1, null)
     fun updateUser(current: UpdateData?) {
         if (_updateState.value != null) return
         if (current != null) {
+            updateUserFromFragmentValue(current)
             _updateState.value = DataState.loading
             updateUser.execute(current)
                 .subscribeOn(Schedulers.io())
@@ -35,6 +37,11 @@ class DetailsViewModel @Inject constructor(private val updateUser: UpdateUser)
                 }
         }
     }
+
+    fun updateUserFromFragmentValue(current: UpdateData) {
+        updateUserFromFragment = current
+    }
+
     fun resetUpdateState() {
         _updateState.value = null
     }

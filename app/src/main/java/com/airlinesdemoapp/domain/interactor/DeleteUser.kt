@@ -10,7 +10,7 @@ import java.net.HttpURLConnection
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class DeleteUser @Inject constructor(private val repository: Repository)
+open class DeleteUser @Inject constructor(private val repository: Repository)
     : Usecase<Int, Single<DataState<String>>>, ErrorHandler {
     override fun execute(para: Int): Single<DataState<String>> {
         return repository.deleteUser(para).onErrorReturn {
