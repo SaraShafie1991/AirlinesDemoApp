@@ -62,7 +62,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesFoursquareAPI(retrofit: Retrofit.Builder):RestAPI{
+    fun providesRestAPI(retrofit: Retrofit.Builder):RestAPI{
         return retrofit.baseUrl(BASE_URL).build().create(RestAPI::class.java)
     }
 }
